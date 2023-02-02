@@ -23,10 +23,10 @@ def start_timer():
     short_break_sec = SHORT_BREAK_MIN *60
     long_break_sec = LONG_BREAK_MIN *60
 
-    if reps % 8 != 0:
+    if reps % 8 == 0:
         count_down(long_break_sec)
         title_label.config(text="Break", fg=RED)
-    elif reps % 2 != 0:
+    elif reps % 2 == 0:
         count_down(short_break_sec)
         title_label.config(text="Break", fg=PINK)
     else:
@@ -46,7 +46,12 @@ def count_down(count):
         screen.after(1000, count_down, count-1)
     else:
         start_timer()
-# ---------------------------- UI SETUP ------------------------------- #
+        mark = ""
+        number_of_checks = math.floor(reps/2)
+        for i in range(number_of_checks):
+            mark += "✔"
+        check_marks.config(text=mark)
+    # ---------------------------- UI SETUP ------------------------------- #
 screen = Tk()
 screen.title("Pomodoro Technique")
 screen.config(padx=100, pady=50, bg=YELLOW)
@@ -67,6 +72,6 @@ reset_button = Button(text="Reset", highlightthickness=0)
 reset_button.grid(column=2, row=2)
 
 
-check_marks = Label(text="✔", fg=GREEN, bg=YELLOW)
+check_marks = Label(fg=GREEN, bg=YELLOW)
 check_marks.grid(column=1, row=3)
 screen.mainloop()
