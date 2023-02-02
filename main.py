@@ -9,6 +9,7 @@ FONT_NAME = "Courier"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
+reps = 0
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
@@ -16,16 +17,35 @@ LONG_BREAK_MIN = 20
 
 
 def start_timer():
-    count_down(5 * 60)
+    global reps
+    reps += 1
+    work_sec = WORK_MIN *60
+    short_break_sec = SHORT_BREAK_MIN *60
+    long_break_sec = LONG_BREAK_MIN *60
+
+    if reps % 8 != 0:
+        count_down(long_break_sec)
+        title_label.config(text="Break", fg=RED)
+    elif reps % 2 != 0:
+        count_down(short_break_sec)
+        title_label.config(text="Break", fg=PINK)
+    else:
+        count_down(work_sec)
+        title_label.config(text="Work", fg=GREEN)
+
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 def count_down(count):
     count_min = math.floor(count / 60)
     count_sec = count % 60
+    if len(str(count_sec)) == 1:
+        count_sec = "0" + str(count_sec)
     canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
     if count > 0:
         screen.after(1000, count_down, count-1)
+    else:
+        start_timer()
 # ---------------------------- UI SETUP ------------------------------- #
 screen = Tk()
 screen.title("Pomodoro Technique")
